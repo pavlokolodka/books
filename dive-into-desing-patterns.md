@@ -76,4 +76,78 @@ and efficient.
 
 # Software design principles
 
+## Features of good design
+### Code reuse
+> Code reuse is one of the most common ways to reduce devel-
+opment costs (time and money).
+
+Tight coupling between components, dependencies on concrete classes instead of interfaces, hardcoded operations — all of this reduces flexibility of the code and makes it harder to
+reuse it. 
+
+Using design patterns is one way to increase flexibility of software components and make them easier to reuse. The trade-off of it - is the price of complicating the software components.
+
+### Extensibility
+
+> Change is the only constant thing in a programmer’s life.
+
+Once you have started solving a problem, you can better understand it. That's why you'd rather rewrite the entire application from scratch than redesign it.
+
+It's crucial to provide for possible future changes when designing an application’s architecture.
+
+## Design Principles
+
+Design principles are different depending on the type of application you’re building. Nevertheless, there are several universal principles of soft-
+ware design that serves as the foundation for most of desing patterns.
+
+You can tell that the design is flexible enough if you can easily extend it without breaking any existing code.
+## Encapsulate What Varies
+
+> Identify the aspects of your application that vary and separate them from what stays the same.
+
+### Encapsulation on a method level
+
+If some peace of code can vary in a function, it's better to remove it to the separate function. By doing this, you provide a stable interface and if you need to change something, it can be done in one place.
+
+```
+// Before
+method getOrderTotal(order) is
+    total = 0
+    foreach item in order.lineItems
+
+    total += item.price * item.quantity
+
+    if (order.country == "US")
+        total += total * 0.07 // US sales tax
+    else if (order.country == "EU"):
+        total += total * 0.20 // European VAT
+    return total
+
+// After
+method getOrderTotal(order) is
+    total = 0
+    foreach item in order.lineItems
+        total += item.price * item.quantity
+
+    total += total * getTaxRate(order.country)
+
+    return total
+
+method getTaxRate(country) is
+    if (country == "US")
+        return 0.07 // US sales tax
+    else if (country == "EU")
+        return 0.20 // European VAT
+    else
+        return 0
+```
+### Encapsulation on a class level
+
+Similar thing comes to classes. As you add more and more logic to your class, it can blur the main purpose of it. Extracting everything that can be done separately to a new class might make things much more clear and simple.
+
+## Program to an Interface, not an Implementation
+
+> Program to an interface, not an implementation. Depend on abstractions, not on concrete classes.
+
+This helps us to remove tight coupling between dependent class and the dependency. With the polymorphism mechanism the code becomes more flexible.
+
 # Catalog of design patterns

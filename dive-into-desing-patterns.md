@@ -144,10 +144,89 @@ method getTaxRate(country) is
 
 Similar thing comes to classes. As you add more and more logic to your class, it can blur the main purpose of it. Extracting everything that can be done separately to a new class might make things much more clear and simple.
 
-## Program to an Interface, not an Implementation
+### Program to an Interface, not an Implementation
 
 > Program to an interface, not an implementation. Depend on abstractions, not on concrete classes.
 
 This helps us to remove tight coupling between dependent class and the dependency. With the polymorphism mechanism the code becomes more flexible.
+
+### Favor Composition Over Inheritance
+
+> A subclass can’t reduce the interface of the superclass. You have to implement all abstract methods of the parent class even if you won’t be using them.
+
+> When overriding methods you need to make sure that the new behavior is compatible with the base one. It’s important because objects of the subclass may be passed to any code that expects objects of the superclass and you don’t want that code to break.
+
+> Inheritance breaks encapsulation of the superclass because the internal details of the parent class become available to the subclass. There might be an opposite situation where a programmer makes a superclass aware of some details of sub-classes for the sake of making further extension easier.
+
+> Subclasses are tightly coupled to superclasses. Any change in a superclass may break the functionality of subclasses.
+
+> Trying to reuse code through inheritance can lead to creating parallel inheritance hierarchies. Inheritance usually takes place in a single dimension. But whenever there are two or more dimensions, you have to create lots of class combinations, bloating the class hierarchy to a ridiculous size.
+
+There’s an alternative to inheritance called **composition**. Whereas inheritance represents the **“is a”** relationship between classes (a car is a transport), composition represents the **“has a”** relationship (a car has an engine). his principle also applies to aggregation -  a more relaxed variant of composition where one object may have a reference to the other one but oesn’t manage its lifecycle.
+
+## SOLID Principles
+
+### Single Responsibility Principle
+
+> A class should have just one reason to change.
+
+Try to make every class responsible for a single part of the functionality provided by the software, and make that responsibility entirely encapsulated by (you can also say hidden within) the class.
+
+### Open/Closed Principle
+
+> Classes should be open for extension but closed for modification.
+
+A class is **open** if you can extend it, produce a subclass and do whatever you want with it. A class is **closed** if its interface is clearly defined and won’t be changed in the future.
+
+If you know that there’s a bug in the class, just go on and fix it; don’t create a subclass for it. *A child class shouldn’t be responsible for the parent’s issues*.
+
+### Liskov Substitution Principle
+
+> When extending a class, remember that you should be able to pass objects of the subclass in place of objects of the parent class without breaking the client code.
+
+This means that the subclass should remain compatible with the behavior of the superclass. When overriding a method, extend the base behavior rather than replacing it with something else entirely.
+
+List of the set of formal requirements for subclasses (specifically for their methods):
+
+1. **Parameter types in a method of a subclass should match or be more abstract than parameter types in the method of the superclass.**
+
+Example: Parent class method: `feed(Cat c)`.
+- Bad: `feed(BengalCat c)`. Now method can accept only a specific type of cat, and wouldn't be work with parent class.
+- Good: `feed(Animal c)`. A subclass is extending from accepting a cat to accepting all the animals (including the cat object). Now if you pass an object of this subclass instead of an object of the superclass to the client code, everything would still work fine.
+
+2. **The return type in a method of a subclass should match or be a subtype of the return type in the method of the superclass.**
+
+Reverse requirement to paramenter types (1)
+
+Example: Parent class method: `buyCat(): Cat`.
+- Bad: `buyCat(): BengalCat`. The client gets a Bengal cat, whichis still a cat, so everything is okay.
+- Good: `buyCat(): Animal`. Now the client code breaks since it receives a generic animal that doesn’t fit a structure designed for a cat.
+
+3. **A method in a subclass shouldn’t throw types of exceptions which the base method isn’t expected to throw.**
+
+Types of exceptions should *match* or be *subtypes* of the ones that the base method is already able to throw.
+
+`try-catch` blocks in the client code target specific types of exceptions which the base method is likely to throw. Therefore, an unexpected exception might slip through the defensive lines of the client code and crash the entire application.
+
+
+4. **A subclass shouldn’t strengthen pre-conditions.**
+
+If a method of base class accepts a parameter of type `int`, then if a subclass method accepts only a positive integers, this will cause an error. Default expectation of the client is not match for the subclass method.
+
+5. **A subclass shouldn’t weaken post-conditions.**
+
+If you have a method of the class is supposed to always close all opened database connections upon returning a value, and then created a subclass and changed it so that database connections remain open (for reuse purpose), client still thinking that it have closed a connecting through the subclass method. This will cause a polluting a system with ghost database connections.
+
+6. **Invariants of a superclass must be preserved.**
+
+Invariants are conditions in which an object make sense.
+
+The rule on invariants is the easiest to violate because you might misunderstand or not realize all of the invariants of a complex class. Therefore, the safest way to extend a class is to introduce new fields and methods, and not mess with any existing members of the superclass.
+
+7. **A subclass shouldn’t change values of private fields of the superclass.**
+
+It turns out some programming languages let you access private members of a class via reflection mechanisms. Other languages (Python, JavaScript) don’t have any protection for the private members at all.
+
+
 
 # Catalog of design patterns

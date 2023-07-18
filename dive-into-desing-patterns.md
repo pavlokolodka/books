@@ -227,6 +227,102 @@ The rule on invariants is the easiest to violate because you might misunderstand
 
 It turns out some programming languages let you access private members of a class via reflection mechanisms. Other languages (Python, JavaScript) don’t have any protection for the private members at all.
 
+### Interface Segregation Principle
+
+> Clients shouldn’t be forced to depend on methods they do not use.
+
+Try to make your interfaces narrow enough that client classes don’t have to implement behaviors they don’t need. It's better to separate the interface to a standalone interfaces and use them where needed, rather than using one interface and implement behaviour that woun't be used. Otherwise, a change to a “fat” interface would break even clients that don’t use the changed methods.
+
+### Dependency Inversion Principle
+
+> High-level classes shouldn’t depend on low-level classes. Both should depend on abstractions. Abstractions shouldn’t depend on details. Details should depend on abstractions.
+
+Usually in application there are two levels of classes:
+
+- **Low-level classes** implement basic operations such as working
+with a disk, transferring data over a network, connecting to a
+database, etc.
+
+- **High-level classes** contain complex business logic that directs
+low-level classes to do something.
+
+Algorithm of using Dependency Inversion Principle while designing a program:
+
+1. Describe interfaces for low-level operations that high-level classes rely on, preferably in business terms.
+
+2. Make high-level classes dependent on those interfaces, instead of on concrete low-level classes.
+
+3. Once low-level classes implement these interfaces, they become dependent on the business logic level (interfaces), reversing the direction of the original dependency.
+
+
+Example. Before Dependency Inversion:
+
+```
++-----------------------------+
+|     SomeService             |
++-----------------------------+
+|   - database: MySqlDatabase |
++-----------------------------+
+|   + get()                   |
+|   + save()                  |
++-----------------------------+
+
+          |
+          |
+          V
+
++----------------------+
+|    MySqlDatabase     |
++----------------------+
+|    + create()        |
+|    + read()          |
+|    + update()        |
+|    + delete()        |
++----------------------+
+
+```
+
+After: High level class `SomeService` don't depend on `MySqlDatabase` class anymore.
+
+```
++-----------------------+
+|     SomeService       |
++-----------------------+
+|  - database: Database |
++-----------------------+
+|  + get()              |
+|  + save()             |
++-----------------------+
+
+          |
+          |
+          V
+
++----------------------+
+| <interface> Database |
++----------------------+
+|    + create()        |
+|    + read()          |
+|    + update()        |
+|    + delete()        |
++----------------------+
+        
+          ^
+          |
+          |
+        
++----------------------+
+|    MySqlDatabase     |
++----------------------+
+|    + create()        |
+|    + read()          |
+|    + update()        |
+|    + delete()        |
++----------------------+
+
+```
+
+As a result, the direction of the original dependency has been inverted: low-level classes are now dependent on high-level abstractions.
 
 
 # Catalog of design patterns

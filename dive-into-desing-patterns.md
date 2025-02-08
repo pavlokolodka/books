@@ -78,8 +78,7 @@ and efficient.
 
 ## Features of good design
 ### Code reuse
-> Code reuse is one of the most common ways to reduce devel-
-opment costs (time and money).
+> Code reuse is one of the most common ways to reduce development costs (time and money).
 
 Tight coupling between components, dependencies on concrete classes instead of interfaces, hardcoded operations — all of this reduces flexibility of the code and makes it harder to
 reuse it. 
@@ -172,6 +171,7 @@ There’s an alternative to inheritance called **composition**. Whereas inherita
 
 Try to make every class responsible for a single part of the functionality provided by the software, and make that responsibility entirely encapsulated by (you can also say hidden within) the class.
 
+---
 ### Open/Closed Principle
 
 > Classes should be open for extension but closed for modification.
@@ -180,6 +180,7 @@ A class is **open** if you can extend it, produce a subclass and do whatever you
 
 If you know that there’s a bug in the class, just go on and fix it; don’t create a subclass for it. *A child class shouldn’t be responsible for the parent’s issues*.
 
+---
 ### Liskov Substitution Principle
 
 > When extending a class, remember that you should be able to pass objects of the subclass in place of objects of the parent class without breaking the client code.
@@ -227,12 +228,14 @@ The rule on invariants is the easiest to violate because you might misunderstand
 
 It turns out some programming languages let you access private members of a class via reflection mechanisms. Other languages (Python, JavaScript) don’t have any protection for the private members at all.
 
+---
 ### Interface Segregation Principle
 
 > Clients shouldn’t be forced to depend on methods they do not use.
 
 Try to make your interfaces narrow enough that client classes don’t have to implement behaviors they don’t need. It's better to separate the interface to a standalone interfaces and use them where needed, rather than using one interface and implement behaviour that woun't be used. Otherwise, a change to a “fat” interface would break even clients that don’t use the changed methods.
 
+---
 ### Dependency Inversion Principle
 
 > High-level classes shouldn’t depend on low-level classes. Both should depend on abstractions. Abstractions shouldn’t depend on details. Details should depend on abstractions.
